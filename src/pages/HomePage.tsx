@@ -12,6 +12,7 @@ import { pendingReset } from '@/services/playerResets';
 import { REROLL_ADMIN_EMAIL, triggerReroll } from '@/services/reroll';
 import { QuizProgress } from '@/components/quiz/QuizProgress';
 import { RoundView } from '@/components/quiz/RoundView';
+import { RoleRush } from '@/components/quiz/RoleRush';
 import { Summary } from '@/components/quiz/Summary';
 import { Leaderboards } from '@/components/quiz/Leaderboards';
 
@@ -173,6 +174,15 @@ function ModeToggle({ mode, onChange }: { mode: QuizMode; onChange: (m: QuizMode
         >
           🌫 Flou
         </button>
+        <button
+          type="button"
+          onClick={() => onChange('role-rush')}
+          className={`rounded-pill px-3.5 py-1.5 transition-colors ${
+            mode === 'role-rush' ? 'bg-emerald-600 text-white' : 'text-ink-soft hover:text-ink'
+          }`}
+        >
+          ⏱ Rôle
+        </button>
       </div>
       {mode === 'hardcore' && (
         <span className="text-xs font-medium text-ink-faint">
@@ -184,6 +194,52 @@ function ModeToggle({ mode, onChange }: { mode: QuizMode; onChange: (m: QuizMode
           15 rounds, rien que des images floutées — splash, skins, sorts.
         </span>
       )}
+      {mode === 'role-rush' && (
+        <span className="text-xs font-medium text-ink-faint">
+          Trouve tous les champions d'un rôle en 10 minutes, sans aide à la saisie.
+        </span>
+      )}
+    </div>
+  );
+}
+
+function RoleRushGame({
+  data,
+  dateKey,
+  dark,
+  onToggleTheme,
+  mode,
+  onChangeMode,
+}: {
+  data: DdragonData;
+  dateKey: string;
+  dark: boolean;
+  onToggleTheme: () => void;
+  mode: QuizMode;
+  onChangeMode: (m: QuizMode) => void;
+}) {
+  return (
+    <div className="min-h-full px-4 py-6 sm:py-10">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+        <Header
+          dateKey={dateKey}
+          dark={dark}
+          onToggleTheme={onToggleTheme}
+          showReroll={false}
+          rerolling={false}
+          onReroll={() => {}}
+        />
+
+        <ModeToggle mode={mode} onChange={onChangeMode} />
+
+        <section className="rounded-card border border-border bg-surface px-4 py-5 shadow-sm sm:px-5">
+          <RoleRush data={data} version={data.version} />
+        </section>
+
+        <footer className="pt-2 text-center text-xs text-ink-faint">
+          {data.champions.length} champions · données Riot Data Dragon (patch {data.version})
+        </footer>
+      </div>
     </div>
   );
 }
@@ -346,7 +402,7 @@ export function HomePage() {
   const [mode, setMode] = useState<QuizMode>(() => {
     try {
       const stored = localStorage.getItem('riftexpress:mode');
-      return stored === 'hardcore' || stored === 'blur' ? stored : 'normal';
+      return stored === 'hardcore' || stored === 'blur' || stored === 'role-rush' ? stored : 'normal';
     } catch {
       return 'normal';
     }
@@ -362,6 +418,21 @@ export function HomePage() {
 
   if (error) return <Centered>Impossible de charger les données du jeu : {error}</Centered>;
   if (!data) return <Centered>Chargement des données du jeu…</Centered>;
+
+  // Role Rush has no daily draw/leaderboard — just the role picker + timer.
+  if (mode === 'role-rush') {
+    return (
+      <RoleRushGame
+        data={data}
+        dateKey={session.dateKey}
+        dark={dark}
+        onToggleTheme={toggle}
+        mode={mode}
+        onChangeMode={changeMode}
+      />
+    );
+  }
+
   // `key` remounts Game on a mode switch, a session change (hourly re-roll),
   // OR a manual admin reroll → a clean fresh state, no transient render with
   // stale progress.
