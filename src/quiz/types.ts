@@ -21,7 +21,7 @@ export type AnswerPool = 'champion' | 'item';
 
 /** Difficulty mode. Hardcore = obscure clues, no easy giveaways. Blur = only
  * the zoomed/blurred-image rounds (skin splash, splash art, spell icon). */
-export type QuizMode = 'normal' | 'hardcore' | 'blur';
+export type QuizMode = 'normal' | 'hardcore' | 'blur' | 'role-rush';
 
 export interface QcmOption {
   label: string;
