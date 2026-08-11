@@ -1,0 +1,108 @@
+@import 'tailwindcss';
+
+/*
+ * "Rift Express" — visual language inspired by the MaRATP transit app:
+ * clean light surfaces, generous rounded cards, a confident transit-green
+ * accent, and feedback tiles styled like metro-line badges.
+ */
+@theme {
+  --color-bg: #f3efe3;
+  --color-surface: #fffdf7;
+  --color-surface-2: #f6f1e4;
+  --color-ink: #1a2236;
+  --color-ink-soft: #5b6478;
+  --color-ink-faint: #9aa1b2;
+
+  --color-primary: #8a6a1f;          /* deep hextech gold (Hextech) */
+  --color-primary-ink: #ffffff;
+  --color-primary-soft: #f0e6cf;
+
+  --color-match: #15a866;            /* attribute matches  */
+  --color-match-ink: #ffffff;
+  --color-partial: #f0a000;          /* partial match      */
+  --color-partial-ink: #3a2c00;
+  --color-miss: #cdd4de;             /* no match           */
+  --color-miss-ink: #3b4453;
+
+  --color-line-blue: #0a98c4;        /* hextech cyan accent */
+  --color-border: #e4e8ef;
+
+  --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 22px;
+  --radius-tile: 14px;
+  --radius-pill: 9999px;
+}
+
+@layer base {
+  /* Dark theme — overrides the token values; every token-based component
+     (bg-surface, text-ink, etc.) adapts automatically. */
+  .dark {
+    --color-bg: #091428;             /* hextech navy */
+    --color-surface: #0f2138;
+    --color-surface-2: #133153;
+    --color-ink: #f0e6d2;            /* light gold-white */
+    --color-ink-soft: #aab3c5;
+    --color-ink-faint: #6b7488;
+
+    --color-primary: #c8aa6e;        /* hextech gold */
+    --color-primary-ink: #091428;
+    --color-primary-soft: #2b2a1c;
+
+    --color-match: #1faa6b;
+    --color-match-ink: #06140d;
+    --color-partial: #f0a000;
+    --color-partial-ink: #2a1f00;
+    --color-miss: #2a3c57;
+    --color-miss-ink: #cdd6e6;
+
+    --color-line-blue: #0ac8b9;      /* hextech teal accent */
+    --color-border: #21456b;
+  }
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    background-image:
+      radial-gradient(1000px 480px at 50% -160px, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent),
+      radial-gradient(620px 360px at 100% 0%, color-mix(in srgb, var(--color-line-blue) 10%, transparent), transparent);
+    background-attachment: fixed;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  select,
+  input,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 9999px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
