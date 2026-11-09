@@ -10,7 +10,8 @@ services:
       enabled: true
     allowedRedirectUris:
       - http://localhost:5173
-      - https://satin-elm-f1c19eee16-francecentral.webapp.fabricapps.net
+      - http://127.0.0.1:5173
+      - https://lean-owl-b574ea151b-northeurope.webapp.fabricapps.net
   data:
     enabled: true
     dialect: mssql
@@ -19,6 +20,7 @@ services:
     folder: dist
     buildCommand: npm run build:fabric
     indexDocument: index.html
+    assetAccess: protected
   storage:
     enabled: false
   functions:
